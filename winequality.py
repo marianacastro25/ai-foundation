@@ -1,6 +1,5 @@
-# ================= Wine Quality Classification Pipeline =================
+Wine Quality Classification
 
-#Imports
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -13,7 +12,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from xgboost import XGBClassifier
 
-#Load Data
+#Data reading
 df = pd.read_csv(r"C:\Users\maria\Documents\ai-foundation\winequality-red.csv", sep=';')
 print(df.head())
 df.info()
@@ -33,11 +32,11 @@ print(f"Numeric cols (continuous features): {num_cols}")
 target = [col for col in df.columns if df[col].nunique()<10]
 print(f"Target column: {target}")
 
-#Target Encoding
+#Target Encoding (quality)
 y = df['quality']
 X = df.drop(['quality'], axis=1)
 
-# Encode target labels 3-8 → 0-5
+
 le = LabelEncoder()
 y_encoded = le.fit_transform(y)
 
@@ -69,7 +68,7 @@ xgb = XGBClassifier(
     random_state=42
 )
 
-# Voting ensemble
+
 voting_clf = VotingClassifier(
     estimators=[('rf', rf), ('lr', lr), ('svc', svc), ('xgb', xgb)],
     voting='soft'
